@@ -34,28 +34,28 @@ class GameBoard:
         return randint(1, 6)
 
     def __getitem__(self, position):
-        return self._cards[position]
+        return self.cards[position]
 
     def __setitem__(self, position, patrimony):
-        self._cards[position] = patrimony
+        self.cards[position] = patrimony
 
     def __len__(self):
-        return len(self._cards)
+        return len(self.cards)
 
     def __str__(self):
-        return f"{self._cards}"
+        return f"{self.cards}"
 
     def __repr__(self):
-        return f"{self._cards}"
+        return f"{self.cards}"
 
     def remove(self, player):
-        for patrimony in self._cards:
+        for patrimony in self.cards:
             if patrimony.type_of_strategy == player:
                 patrimony.type_of_strategy = None
-        self._players.remove(player)
+        self.players.remove(player)
 
     def walk(self, player, _dice=None):
-        go_to_position = player.position + (_dice or self.play_dice)
+        go_to_position = player.position + (_dice or self.play_dice())
         if go_to_position >= int(os.getenv('ENV_QUANTITY_OF_PROPERTIES')):
             '''
             Ao completar uma volta no tabuleiro,
@@ -78,7 +78,7 @@ class GameBoard:
         if int(os.getenv('ENV_TIMEOUT_ROUND')) <= self.played:
             money = 0
             winner = None
-            for _player in self._players:
+            for _player in self.players:
                 if _player.money > money:
                     money = _player.money
                     winner = _player
@@ -86,7 +86,7 @@ class GameBoard:
 
         elements = [
             _player.money
-            for _player in self._players if _player != player
+            for _player in self.players if _player != player
         ]
         if sum(elements) < 0:
             return player
@@ -104,7 +104,7 @@ class GameBoard:
             player.gameover = True
             return
 
-        patrimony = self._cards[self.walk(player)]
+        patrimony = self.cards[self.walk(player)]
         player.income_or_sale(patrimony, board)
 
     def finish(self):

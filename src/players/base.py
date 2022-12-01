@@ -10,7 +10,7 @@ class BasePlayer(ABC):
 
     def __init__(
         self, strategy, position=0,
-        money=os.getenv('ENV_PLAYER_MONEY')
+        money=float(os.getenv('ENV_PLAYER_MONEY'))
     ):
         self.position = position
         self.money = money
@@ -29,11 +29,11 @@ class BasePlayer(ABC):
                 self.paid(patrimony.rental_price, patrimony.type_of_strategy)
             return
 
-        if self._roles_to_payment(patrimony):
+        if self._rules_to_payment(patrimony):
             patrimony.type_of_strategy = self
 
     @abstractmethod
-    def _roles_to_payment(self, patrimony, board):
+    def _rules_to_payment(self, patrimony, board):
         raise NotImplementedError()
 
     def paid(self, property_price, type_of_strategy=None):

@@ -1,15 +1,19 @@
-from banco_imobiliario.config import settings
+import os
+import json
+from dotenv import load_dotenv
 
 from .game_board import GameBoard
-from .player_cautious import PlayerCautious
-from .player_demanding import PlayerDemanding
-from .player_impulsive import PlayerImpulsive
-from .player_random import PlayerRandom
+from players.player_cautious import PlayerCautious
+from players.player_demanding import PlayerDemanding
+from players.player_impulsive import PlayerImpulsive
+from players.player_random import PlayerRandom
+
+load_dotenv()
 
 strategies = {
-    "impulsive": PlayerImpulsive,
-    "demanding": PlayerDemanding,
     "cautious": PlayerCautious,
+    "demanding": PlayerDemanding,
+    "impulsive": PlayerImpulsive,
     "randomer": PlayerRandom,
 }
 
@@ -28,9 +32,10 @@ def create_player(strategy: str, *args, **kwargs):
 
 def create_board():
     board = GameBoard()
+    env_strategies = json.loads(os.getenv('ENV_STRATEGY'))
     players = [
         create_player(strategy)
-        for strategy in settings.ENV_STRATEGY
+        for strategy in env_strategies
     ]
     board.players = players
     return board
