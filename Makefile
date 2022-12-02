@@ -6,21 +6,21 @@ help:
 	@echo
 	@echo  "uso: make <sub comando>"
 	@echo  "Sub comandos:"
-	@echo  "    run""					        ""Rodar projeto"
-	@echo  "    run_test""					""Rodar teste de cobertura de codigo e pytest com modular fixture"
+	@echo  "    dependencies""					""Criar venv e instalar as deps Python"
+	@echo  "    run""							""Rodar projeto"
+	@echo  "    run_test""						""Rodar teste de cobertura de codigo e pytest com modular fixture"
 
 VENV = venv
 PYTHON = $(VENV)/bin/python3.10
 PIP = $(VENV)/bin/pip
 
-run: $(VENV)/bin/activate
-	$(PYTHON) src/main.py
-
-
-$(VENV)/bin/activate: requirements.txt
-	 python3 -m venv $(VENV)
+dependencies: requirements.txt
+	 python3.10 -m venv $(VENV)
+	 $(PIP) install --upgrade pip
 	 $(PIP) install -r requirements.txt
 
+run: $(VENV)/bin/activate
+	$(PYTHON) src/main.py
 
 clean:
 	rm -rf __pycache__
