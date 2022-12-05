@@ -14,13 +14,18 @@ VENV = venv
 PYTHON = $(VENV)/bin/python3.10
 PIP = $(VENV)/bin/pip
 
+.PHONY: run clean
+
 dependencies: requirements.txt
 	 python3.10 -m venv $(VENV)
 	 $(PIP) install --upgrade pip
 	 $(PIP) install -r requirements.txt
 
-run: $(VENV)/bin/activate
+run:
 	$(PYTHON) src/main.py
+
+run_test:
+	$(VENV)/bin/pytest --cov-append --cov=src src/tests/
 
 clean:
 	rm -rf __pycache__
